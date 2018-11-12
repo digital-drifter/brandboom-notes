@@ -1,10 +1,18 @@
-import Vue from 'vue';
-import App from './App.vue';
-import store from './store';
+import '@babel/polyfill'
+import Vue, { CreateElement } from 'vue'
+import '@/assets/main.styl'
+import Vuetify from 'vuetify'
+import App from '@/App.vue'
+import store from '@/store'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
-Vue.config.productionTip = false;
+Vue.use(Vuetify, {
+  iconfont: 'md',
+})
+
+Vue.config.productionTip = false
 
 new Vue({
   store,
-  render: (h) => h(App),
-}).$mount('#app');
+  render: (h: CreateElement) => h(App)
+}).$mount('#app')
