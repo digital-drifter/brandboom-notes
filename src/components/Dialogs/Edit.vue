@@ -1,33 +1,40 @@
 <template>
     <v-dialog max-width="500" v-model="dialog">
-        <v-card :color="note.color.color" :dark="theme === 'dark'" :light="theme === 'light'">
+        <v-card v-if="note" :color="note.color.color" :dark="theme === 'dark'" :light="theme === 'light'">
             <v-toolbar card flat :color="note.color.color">
-                <v-toolbar-title>New Note</v-toolbar-title>
+                <v-toolbar-title>Edit Note</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-                <v-text-field solo :dark="theme === 'dark'" :light="theme === 'light'" label="Title" required v-model="title"></v-text-field>
-                <v-textarea solo :dark="theme === 'dark'" :light="theme === 'light'" label="Contents" v-model="content"></v-textarea>
+                <v-text-field solo :dark="theme === 'dark'" :light="theme === 'light'" label="Title" required v-model="note.title"></v-text-field>
+                <v-textarea solo :dark="theme === 'dark'" :light="theme === 'light'" label="Contents" v-model="note.content"></v-textarea>
             </v-card-text>
             <v-divider></v-divider>
             <color-palette :color.sync="note.color"></color-palette>
             <v-divider></v-divider>
             <v-card-actions>
-                <v-btn @click="$emit('update:dialog', false)" color="light-grey" raised>
+                <v-btn @click="closeDialog" color="light-grey" raised>
                     Cancel
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn @click="submit" color="cyan" dark raised>
+                <v-btn @click="updateNote" color="cyan" dark raised>
                     Save
                 </v-btn>
             </v-card-actions>
         </v-card>
+        <v-snackbar :bottom="true" :color="statusColor" :timeout="6000" v-model="snackbar">
+            {{ message }}
+            <v-btn @click="snackbar = false" color="pink" flat>
+                Close
+            </v-btn>
+        </v-snackbar>
     </v-dialog>
 </template>
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator'
+  import colors from 'vuetify/es5/util/colors'
   import ColorPalette from '@/components/ColorPalette.vue'
-  import { INote, ThemeOption } from '@/brandroom-notes'
+  import { INote, IPaletteColor, ThemeOption } from '@/brandroom-notes'
 
   @Component({
     components: {
@@ -38,24 +45,63 @@
     @Prop({ type: Boolean, required: true })
     public dialog: boolean
 
-    @Prop({ type: Object, required: false })
-    public note: INote
+    get note(): INote {
+      return this.$store.getters.getNote
+    }
 
-    public title: string = ''
+    set note(note: INote) {
+      this.$store.commit('setNote', note)
+    }
 
-    public content: string = ''
+    // public title: string = ''
+    //
+    // public content: string = ''
+
+    protected snackbar: boolean = false
+
+    protected message: string = ''
+
+    protected statusColor: string = 'green'
+
+    // protected color: IPaletteColor = {
+    //   name: 'yellow',
+    //   active: true,
+    //   theme: 'light',
+    //   color: colors.yellow.base
+    // }
 
     get theme (): ThemeOption {
       return this.note.color.theme
     }
 
-    mounted(): void {
-      this.title = this.note.title
-      this.content = this.note.content
+    // public mounted(): void {
+    //   this.color = this.note.color
+    //   this.title = this.note.title
+    //   this.content = this.note.content
+    // }
+
+    public updateNote (): void {
+      this.$store.dispatch('updateNote', {
+        title: this.note.title,
+        color: this.note.color,
+        content: this.note.content
+      }).then(() => {
+        this.statusColor = 'green'
+        this.message = 'Note Updated'
+        this.snackbar = true
+
+        this.closeDialog()
+      }).catch((error: any) => {
+        this.statusColor = 'red'
+        this.message = 'An error occurred while updating the note'
+        this.snackbar = true
+      })
     }
 
-    submit(): void {
-      // todo
+    public closeDialog (): void {
+      this.$emit('update:dialog', false)
+      this.title = ''
+      this.content = ''
     }
   }
 </script>

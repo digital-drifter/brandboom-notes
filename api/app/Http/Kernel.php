@@ -2,19 +2,16 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
-use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
-use Illuminate\Auth\Middleware\Authorize;
+use Barryvdh\Cors\HandleCors;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
 use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
-use Illuminate\Session\Middleware\AuthenticateSession;
 
 class Kernel extends HttpKernel
 {
@@ -42,6 +39,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            'cors'
         ],
     ];
 
@@ -53,12 +51,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'          => Authenticate::class,
         'bindings'      => SubstituteBindings::class,
         'cache.headers' => SetCacheHeaders::class,
-        'can'           => Authorize::class,
-        'guest'         => RedirectIfAuthenticated::class,
-        'throttle'      => ThrottleRequests::class
+        'throttle'      => ThrottleRequests::class,
+        'cors'          => HandleCors::class
     ];
 
     /**
@@ -69,9 +65,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewarePriority = [
-        Authenticate::class,
-        AuthenticateSession::class,
-        SubstituteBindings::class,
-        Authorize::class,
+        SubstituteBindings::class
     ];
 }

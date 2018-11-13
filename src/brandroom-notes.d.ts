@@ -22,4 +22,5 @@ export type ThemeOption = 'light' | 'dark'
 
 export interface IState {
   notes: INote[]
+  note: INote | null
 }

@@ -22,7 +22,7 @@
                                         <v-icon flat>more_vert</v-icon>
                                     </v-btn>
                                     <v-list>
-                                        <v-list-tile :key="index" @click="option.click" avatar v-for="(option, index) in options">
+                                        <v-list-tile :key="index" @click="option.click(note)" avatar v-for="(option, index) in options">
                                             <v-list-tile-avatar>
                                                 <v-icon :color="note.color.color">{{ option.icon }}</v-icon>
                                             </v-list-tile-avatar>
@@ -33,8 +33,6 @@
                             </v-toolbar>
                             <v-card-text>{{ note.content }}</v-card-text>
                         </v-card>
-                        <edit :dialog.sync="dialogs.edit" :note.sync="note"></edit>
-                        <delete :dialog.sync="dialogs.delete" :note="note"></delete>
                     </v-flex>
                 </v-layout>
             </v-container>
@@ -48,8 +46,16 @@
                 </v-layout>
             </v-container>
         </v-content>
+        <edit :dialog.sync="dialogs.edit"></edit>
+        <delete :dialog.sync="dialogs.delete"></delete>
         <create :dialog.sync="dialogs.create"></create>
         <v-tour :options="{ startTimeout: 2000, labels: { buttonStop: 'Dismiss' } }" :steps="steps" :style="{ zIndex: 10 }" name="getting-started"></v-tour>
+        <v-snackbar :bottom="true" :color="statusColor" :timeout="6000" v-model="snackbar">
+            {{ message }}
+            <v-btn :color="buttonColor" @click="snackbar = false" flat>
+                Close
+            </v-btn>
+        </v-snackbar>
     </v-app>
 </template>
 
@@ -85,22 +91,28 @@
       {
         text: 'Edit',
         icon: 'edit',
-        click: () => {
-          this.$nextTick(() => {
-            this.dialogs.edit = true
-          })
+        click: (note: INote) => {
+          this.$store.commit('setNote', note)
+          this.dialogs.edit = true
         }
       },
       {
         text: 'Delete',
         icon: 'delete',
-        click: () => {
-          this.$nextTick(() => {
-            this.dialogs.delete = true
-          })
+        click: (note: INote) => {
+          this.$store.commit('setNote', note)
+          this.dialogs.delete = true
         }
       }
     ]
+
+    protected snackbar: boolean = false
+
+    protected message: string = ''
+
+    protected statusColor: string = 'green'
+
+    protected buttonColor: string = 'pink'
 
     get notes (): INote[] {
       return this.$store.getters['getNotes']
@@ -108,6 +120,14 @@
 
     public mounted (): void {
       this.$tours['getting-started'].start()
+
+      this.$store.dispatch('fetchNotes')
+        .catch((error: any) => {
+          this.message = 'Unable to fetch notes'
+          this.statusColor = 'red'
+          this.buttonColor = 'white'
+          this.snackbar = true
+        })
     }
   }
 </script>

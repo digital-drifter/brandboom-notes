@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class NoteController extends Controller
 {
@@ -26,9 +27,9 @@ class NoteController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        abort_unless($note = Note::create($request->only(['title', 'content'])), 400);
+        abort_unless($note = Note::create($request->only(['title', 'content', 'color'])), 400);
 
-        return response()->json(compact('note'), 201);
+        return response()->json(compact('note'));
     }
 
     /**

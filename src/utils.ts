@@ -1,5 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
-import { ThemeOption } from '@/brandroom-notes'
+import { IPaletteColor, ThemeOption } from '@/brandroom-notes'
 
 /**
  * Calculate the luminosity of the given hex color string.
@@ -16,7 +16,7 @@ const luminance = (invert: string) => {
   return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]
 }
 
-export const generateColorPalette = (color?: string) => {
+export const generateColorPalette = (color?: string): IPaletteColor[] => {
   const threshold: number = (Math.sqrt(1.05 * 0.05) - 0.01) / 100
 
   return Object.keys(colors).filter((key: string) => (colors as any)[key].hasOwnProperty('base')).map((key: string) => {
@@ -28,7 +28,7 @@ export const generateColorPalette = (color?: string) => {
 
     return {
       name: key,
-      active: (color && (key === color)),
+      active: (color && (key === color)) || false,
       color: (colors as any)[key].base,
       theme: (luminance(invert) > threshold ? 'dark' : 'light') as ThemeOption
     }

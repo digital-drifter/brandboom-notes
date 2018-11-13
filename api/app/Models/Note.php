@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Note extends Model
 {
@@ -11,16 +10,16 @@ class Note extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
         'title',
-        'content'
+        'content',
+        'color'
     ];
 
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
+//    /**
+//     * @return array
+//     */
+//    public function getColorAttribute(): array
+//    {
+//        return json_decode($this->getAttribute('color'), true);
+//    }
 }
