@@ -109,5 +109,9 @@
     get notes (): INote[] {
       return this.$store.getters['getNotes']
     }
+
+    created(): void {
+
+    }
   }
 </script>

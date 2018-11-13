@@ -5,6 +5,7 @@
   ],
   "linterOptions": {
     "exclude": [
+      "api/**",
       "node_modules/**"
     ]
   },

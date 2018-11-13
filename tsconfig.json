@@ -35,6 +35,7 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
+    "api",
     "node_modules"
   ]
 }
