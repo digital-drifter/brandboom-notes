@@ -2,13 +2,12 @@ export interface INote {
   id: number
   title: string
   content: string
-  color: string
+  color: IPaletteColor
 }
 
 export interface IDialogs {
   create: boolean
   edit: boolean
-  palette: boolean
   delete: boolean
 }
 

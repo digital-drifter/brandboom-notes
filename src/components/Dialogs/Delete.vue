@@ -1,17 +1,18 @@
 <template>
     <v-dialog max-width="500" v-model="dialog">
         <v-card>
-            <v-toolbar card>
-                <v-toolbar-title>Confirm Delete</v-toolbar-title>
+            <v-toolbar card flat color="red" dark>
+                <v-toolbar-icon><v-icon>warning</v-icon></v-toolbar-icon>
+                <v-toolbar-title>Delete Note?</v-toolbar-title>
             </v-toolbar>
-            <v-card-text>Are you sure you want to delete this note?</v-card-text>
+            <v-card-text>Click confirm to permanently delete this note.</v-card-text>
             <v-card-actions>
-                <v-btn @click="$emit('update:dialog', false)" color="green darken-1" raised>
+                <v-btn @click="$emit('update:dialog', false)" light class="grey lighten-1" raised>
                     Cancel
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn @click="submit" color="red" raised>
-                    Delete
+                <v-btn @click="submit" color="red" dark raised>
+                    Confirm
                 </v-btn>
             </v-card-actions>
         </v-card>
