@@ -100,8 +100,6 @@
 
     public closeDialog (): void {
       this.$emit('update:dialog', false)
-      this.title = ''
-      this.content = ''
     }
   }
 </script>

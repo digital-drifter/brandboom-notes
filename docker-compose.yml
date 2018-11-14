@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  app:
+    container_name: brandboom_notes
+    image: brandboom/notes:latest
+    build: 
+      dockerfile: ./docker/Dockerfile
+      context: .
+    volumes:
+      - ./api:/var/www/brandboom/api:cached
+      - ./dist:/var/www/brandboom/notes:cached
+      - ./docker/nginx:/etc/nginx/config/d:cached
+    ports:
+      - 80:80
