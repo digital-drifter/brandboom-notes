@@ -18,12 +18,6 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <v-snackbar :bottom="true" :color="statusColor" :timeout="6000" v-model="snackbar">
-            {{ message }}
-            <v-btn @click="snackbar = false" color="pink" flat>
-                Close
-            </v-btn>
-        </v-snackbar>
     </v-dialog>
 </template>
 
@@ -44,23 +38,14 @@
       this.$store.commit('setNote', note)
     }
 
-    protected snackbar: boolean = false
-
-    protected message: string = ''
-
-    protected statusColor: string = 'green'
-
     public submit (): void {
       this.$store.dispatch('deleteNote', this.note)
         .then(() => {
-          this.message = 'Note Deleted'
-          this.snackbar = true
+          this.$root.$emit('snackbar:show', { message: 'Note deleted', statusColor: 'green', buttonColor: 'black' })
           this.closeDialog()
         })
         .catch((error: any) => {
-          this.statusColor = 'red'
-          this.message = 'An error occurred while deleting the note'
-          this.snackbar = true
+          this.$root.$emit('snackbar:show', { message: 'An error occurred while deleting the note', statusColor: 'red', buttonColor: 'white' })
         })
     }
 

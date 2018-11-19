@@ -21,12 +21,6 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <v-snackbar :bottom="true" :timeout="6000" v-model="snackbar" :color="statusColor">
-            {{ message }}
-            <v-btn @click="snackbar = false" color="pink" flat>
-                Close
-            </v-btn>
-        </v-snackbar>
     </v-dialog>
 </template>
 
@@ -44,12 +38,6 @@
   export default class Create extends Vue {
     @Prop({ type: Boolean, required: true })
     public dialog: boolean
-
-    protected snackbar: boolean = false
-
-    protected message: string = ''
-
-    protected statusColor: string = 'green'
 
     protected title: string = ''
 
@@ -72,15 +60,11 @@
         color: this.color,
         content: this.content
       }).then(() => {
-        this.statusColor = 'green'
-        this.message = 'Note Saved'
-        this.snackbar = true
+        this.$root.$emit('snackbar:show', { message: 'Note saved', statusColor: 'green', buttonColor: 'black' })
 
         this.closeDialog()
       }).catch((error: any) => {
-        this.statusColor = 'red'
-        this.message = 'An error occurred while saving the note'
-        this.snackbar = true
+        this.$root.$emit('snackbar:show', { message: 'An error occurred while saving the note', statusColor: 'red', buttonColor: 'white' })
       })
     }
 

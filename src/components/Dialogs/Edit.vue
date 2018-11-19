@@ -21,12 +21,6 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <v-snackbar :bottom="true" :color="statusColor" :timeout="6000" v-model="snackbar">
-            {{ message }}
-            <v-btn @click="snackbar = false" color="pink" flat>
-                Close
-            </v-btn>
-        </v-snackbar>
     </v-dialog>
 </template>
 
@@ -53,27 +47,17 @@
       this.$store.commit('setNote', note)
     }
 
-    protected snackbar: boolean = false
-
-    protected message: string = ''
-
-    protected statusColor: string = 'green'
-
     get theme (): ThemeOption {
       return this.note.color.theme
     }
 
     public updateNote (): void {
       this.$store.dispatch('updateNote', this.note).then(() => {
-        this.statusColor = 'green'
-        this.message = 'Note Updated'
-        this.snackbar = true
+        this.$root.$emit('snackbar:show', { message: 'Note updated', statusColor: 'green', buttonColor: 'black' })
 
         this.closeDialog()
       }).catch((error: any) => {
-        this.statusColor = 'red'
-        this.message = 'An error occurred while updating the note'
-        this.snackbar = true
+        this.$root.$emit('snackbar:show', { message: 'An error occurred while updating the note', statusColor: 'red', buttonColor: 'white' })
       })
     }
 
