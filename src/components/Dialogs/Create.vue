@@ -6,7 +6,8 @@
             </v-toolbar>
             <v-card-text>
                 <v-text-field :dark="theme === 'dark'" :light="theme === 'light'" label="Title" required solo v-model="title"></v-text-field>
-                <v-textarea :dark="theme === 'dark'" :light="theme === 'light'" label="Contents" solo v-model="content"></v-textarea>
+                <!--<v-textarea :dark="theme === 'dark'" :light="theme === 'light'" label="Contents" solo v-model="content"></v-textarea>-->
+                <wysiwyg v-model="content"></wysiwyg>
             </v-card-text>
             <v-divider></v-divider>
             <color-palette :color.sync="color"></color-palette>
@@ -16,7 +17,7 @@
                     Cancel
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn @click="storeNote" color="cyan" raised>
+                <v-btn @click="storeNote" color="cyan" raised :disabled="disabled">
                     Save
                 </v-btn>
             </v-card-actions>
@@ -52,6 +53,10 @@
 
     get theme (): ThemeOption {
       return this.color.theme
+    }
+
+    get disabled(): boolean {
+      return !this.title.length || !this.content.length
     }
 
     public storeNote (): void {

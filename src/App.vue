@@ -12,7 +12,7 @@
         <v-content>
             <v-container class="grey lighten-4" fluid grid-list-lg v-if="notes.length > 0">
                 <v-layout row wrap>
-                    <v-flex :key="`note-${note.id}`" dark v-for="note in notes" xs3>
+                    <v-flex :key="`note-${note.id}`" dark v-for="note in notes" xs12 sm6 md4 lg3>
                         <v-card :color="note.color.color" hover>
                             <v-toolbar :color="note.color.color" flat>
                                 <v-toolbar-title>{{ note.title }}</v-toolbar-title>

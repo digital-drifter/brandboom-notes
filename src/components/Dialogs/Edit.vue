@@ -1,12 +1,13 @@
 <template>
     <v-dialog max-width="500" v-model="dialog">
-        <v-card v-if="note" :color="note.color.color" :dark="theme === 'dark'" :light="theme === 'light'">
-            <v-toolbar card flat :color="note.color.color">
+        <v-card :color="note.color.color" :dark="theme === 'dark'" :light="theme === 'light'" v-if="note">
+            <v-toolbar :color="note.color.color" card flat>
                 <v-toolbar-title>Edit Note</v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-                <v-text-field solo :dark="theme === 'dark'" :light="theme === 'light'" label="Title" required v-model="note.title"></v-text-field>
-                <v-textarea solo :dark="theme === 'dark'" :light="theme === 'light'" label="Contents" v-model="note.content"></v-textarea>
+                <v-text-field :dark="theme === 'dark'" :light="theme === 'light'" label="Title" required solo v-model="note.title"></v-text-field>
+                <!--<v-textarea :dark="theme === 'dark'" :light="theme === 'light'" label="Contents" solo v-model="note.content"></v-textarea>-->
+                <wysiwyg v-model="note.content"></wysiwyg>
             </v-card-text>
             <v-divider></v-divider>
             <color-palette :color.sync="note.color"></color-palette>
@@ -16,7 +17,7 @@
                     Cancel
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn @click="updateNote" color="cyan" dark raised>
+                <v-btn @click="updateNote" color="cyan" dark raised :disabled="disabled">
                     Save
                 </v-btn>
             </v-card-actions>
@@ -26,9 +27,8 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator'
-  import colors from 'vuetify/es5/util/colors'
   import ColorPalette from '@/components/ColorPalette.vue'
-  import { INote, IPaletteColor, ThemeOption } from '@/brandroom-notes'
+  import { INote, ThemeOption } from '@/brandroom-notes'
 
   @Component({
     components: {
@@ -39,16 +39,20 @@
     @Prop({ type: Boolean, required: true })
     public dialog: boolean
 
-    get note(): INote {
+    get note (): INote {
       return this.$store.getters.getNote
     }
 
-    set note(note: INote) {
+    set note (note: INote) {
       this.$store.commit('setNote', note)
     }
 
     get theme (): ThemeOption {
       return this.note.color.theme
+    }
+
+    get disabled(): boolean {
+      return !this.note.title.length || !this.note.content.length
     }
 
     public updateNote (): void {

@@ -1,4 +1,9 @@
-# brandboom-notes
+# Brandboom Notes
+
+```bash
+# Run using docker
+docker run -p 8585:80 -d digitaldrifter/brandboom-notes:latest
+```
 
 ## Project setup
 ```

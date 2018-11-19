@@ -1,16 +1,21 @@
 <template>
-    <v-container fluid full-height grid-list-lg>
-        <v-layout row wrap>
-            <v-flex :key="index" @click="updateColor(color)" v-for="(color, index) in palette" xs3>
-                <v-card :class="{ 'elevation-20': color.active }" flat tile>
-                    <v-tooltip top>
-                        <div :style="{ backgroundColor: color.color, minHeight: '3rem' }" slot="activator"></div>
-                        <span>{{ color.name }}</span>
-                    </v-tooltip>
-                </v-card>
-            </v-flex>
-        </v-layout>
-    </v-container>
+    <v-expansion-panel>
+        <v-expansion-panel-content>
+            <div slot="header">Color Palatte</div>
+            <v-container fluid full-height grid-list-lg>
+                <v-layout row wrap>
+                    <v-flex :key="index" @click="updateColor(color)" v-for="(color, index) in palette" xs2>
+                        <v-card :class="{ 'elevation-20': color.active }" flat tile>
+                            <v-tooltip top>
+                                <div :style="{ backgroundColor: color.color, minHeight: '3rem' }" slot="activator"></div>
+                                <span>{{ color.name }}</span>
+                            </v-tooltip>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-expansion-panel-content>
+    </v-expansion-panel>
 </template>
 
 <script lang="ts">
