@@ -15,11 +15,12 @@ class Note extends Model
         'color'
     ];
 
-//    /**
-//     * @return array
-//     */
-//    public function getColorAttribute(): array
-//    {
-//        return json_decode($this->getAttribute('color'), true);
-//    }
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (Note $note) {
+            $note->setAttribute('content', data_get($note, 'content', ''));
+        });
+    }
 }

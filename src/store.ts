@@ -8,7 +8,7 @@ const BASE_API_URL: string = `${process.env.VUE_APP_URL || 'http://localhost'}:$
 
 const state: IState = {
   notes: Array<INote>(),
-  note: null
+  note: undefined
 }
 
 export default new Vuex.Store({
@@ -25,20 +25,9 @@ export default new Vuex.Store({
       s.notes = notes
     },
     updateNote: (s: IState, note: INote) => {
-      if (typeof note.color === 'string') {
-        note.color = JSON.parse(note.color)
-      }
       s.notes.splice(s.notes.findIndex((n: INote) => n.id === note.id), 1, note)
     },
     addNote: (s: IState, note: INote) => {
-      if (typeof note.id !== 'number') {
-        note.id = s.notes.reduce((id: number, n: INote) => {
-          return n.id > id ? n.id : id
-        }, 1)
-      }
-      if (typeof note.color === 'string') {
-        note.color = JSON.parse(note.color)
-      }
       s.notes.push(note)
     },
     deleteNote: (s: IState, note: INote) => {
@@ -51,8 +40,8 @@ export default new Vuex.Store({
         .then((response: Response) => response.json())
         .then((json: any) => {
           json.notes.forEach((note: INote) => {
-            if (typeof note.color === 'string') {
-              note.color = JSON.parse(note.color)
+            if (!note.content) {
+              note.content = ''
             }
           })
 
@@ -66,7 +55,7 @@ export default new Vuex.Store({
 
       formData.append('title', note.title)
       formData.append('content', note.content)
-      formData.append('color', JSON.stringify(note.color))
+      formData.append('color', note.color)
 
       return fetch(`${BASE_API_URL}/notes`, {
         method: 'post',
@@ -85,7 +74,7 @@ export default new Vuex.Store({
       formData.append('_method', 'put')
       formData.append('title', note.title)
       formData.append('content', note.content)
-      formData.append('color', JSON.stringify(note.color))
+      formData.append('color', note.color)
 
       return fetch(`${BASE_API_URL}/notes/${note.id}`, {
         method: 'post',
@@ -95,10 +84,6 @@ export default new Vuex.Store({
         .then((json: any) => {
           const index: number = context.state.notes.findIndex((n: INote) => n.id === json.note.id)
           const notes: INote[] = [...context.state.notes]
-
-          if (typeof json.note.color === 'string') {
-            json.note.color = JSON.parse(json.note.color)
-          }
 
           notes.splice(index, 1, json.note)
 
