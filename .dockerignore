@@ -1,5 +1,6 @@
 public
 src
+.idea
 .env
 .env.development
 babel.config.js
@@ -16,5 +17,4 @@ api/.editorconfig
 api/composer.json
 api/composer.lock
 api/phpunit.xml
-api/storage/logs/*.log
 api/tests
