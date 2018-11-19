@@ -11,15 +11,11 @@
         </v-toolbar>
         <v-content>
             <v-container class="grey lighten-4" fluid grid-list-lg v-if="notes.length > 0">
-                <v-slide-x-reverse-transition group mode="out-in" tag="v-layout" class="wrap row">
+                <v-slide-x-reverse-transition class="wrap row" group mode="out-in" tag="v-layout">
                     <v-flex :key="`note-${note.id}`" dark v-for="note in notes" xs6>
                         <v-card :color="note.color" :style="{ opacity: note.title.includes(search) || note.content.includes(search) ? 1 : 0.3 }" hover>
                             <v-toolbar :color="note.color" :style="{ opacity: note.title.includes(search) || note.content.includes(search) ? 1 : 0.3 }" flat>
                                 <v-text-field flat hide-details v-model="note.title"></v-text-field>
-                                <v-spacer></v-spacer>
-                                <swatches :row-length="6" :show-border="true" :swatch-size="30" @input="note.color = $event" colors="material-light" popover-to="bottom" shapes="circles" v-model="note.color">
-                                    <v-icon class="black--text" flat slot="trigger">palette</v-icon>
-                                </swatches>
                             </v-toolbar>
                             <v-card-text>
                                 <div class="editor">
@@ -79,11 +75,22 @@
                                 </div>
                             </v-card-text>
                             <v-card-actions>
+                                <swatches :row-length="8" :show-border="true" :swatch-size="30" @input="note.color = $event" colors="material-light" popover-to="right" shapes="circles" v-model="note.color">
+                                    <v-icon class="black--text" flat slot="trigger">palette</v-icon>
+                                </swatches>
                                 <v-spacer></v-spacer>
-                                <v-btn @click="deleteNote(note)" color="red" dark fab raised right small>
-                                    <v-icon flat small>delete</v-icon>
-                                </v-btn>
-                                <v-btn @click="updateNote(note)" color="blue" dark fab raised right small>
+                                <v-fab-transition>
+                                    <v-btn color="red" dark fab raised small v-model="editMode">
+                                        <v-icon flat small>delete</v-icon>
+                                        <v-icon flat small>cancel</v-icon>
+                                    </v-btn>
+                                </v-fab-transition>
+                                <v-fab-transition>
+                                    <v-btn @click="deleteNote(note)" color="red" dark fab raised small v-show="editMode">
+                                        <v-icon flat small>done</v-icon>
+                                    </v-btn>
+                                </v-fab-transition>
+                                <v-btn @click="updateNote(note)" color="blue" dark fab raised small>
                                     <v-icon flat small>save</v-icon>
                                 </v-btn>
                             </v-card-actions>
@@ -126,6 +133,8 @@
     }
   })
   export default class App extends Vue {
+    public editMode: boolean = false
+
     protected search: string = ''
 
     protected loading: boolean = false
