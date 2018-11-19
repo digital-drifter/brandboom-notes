@@ -4,7 +4,7 @@ import { INote, IState } from '@/brandroom-notes'
 
 Vue.use(Vuex)
 
-const BASE_API_URL: string = 'https://api.brandboom.localhost'
+const BASE_API_URL: string = `${process.env.VUE_APP_URL || 'http://localhost'}:${process.env.VUE_APP_PORT || 8585}/api`
 
 const state: IState = {
   notes: Array<INote>(),
@@ -47,7 +47,7 @@ export default new Vuex.Store({
   },
   actions: {
     fetchNotes: async (context: ActionContext<IState, any>) => {
-      return fetch(`${BASE_API_URL}/api/notes`)
+      return fetch(`${BASE_API_URL}/notes`)
         .then((response: Response) => response.json())
         .then((json: any) => {
           json.notes.forEach((note: INote) => {
@@ -68,7 +68,7 @@ export default new Vuex.Store({
       formData.append('content', note.content)
       formData.append('color', JSON.stringify(note.color))
 
-      return fetch(`${BASE_API_URL}/api/notes`, {
+      return fetch(`${BASE_API_URL}/notes`, {
         method: 'post',
         body: formData
       })
@@ -87,7 +87,7 @@ export default new Vuex.Store({
       formData.append('content', note.content)
       formData.append('color', JSON.stringify(note.color))
 
-      return fetch(`${BASE_API_URL}/api/notes/${note.id}`, {
+      return fetch(`${BASE_API_URL}/notes/${note.id}`, {
         method: 'post',
         body: formData
       })
@@ -112,7 +112,7 @@ export default new Vuex.Store({
 
       formData.append('_method', 'delete')
 
-      return fetch(`${BASE_API_URL}/api/notes/${note.id}`, {
+      return fetch(`${BASE_API_URL}/notes/${note.id}`, {
         method: 'post',
         body: formData
       }).then(() => {

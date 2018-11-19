@@ -10,6 +10,6 @@ services:
     volumes:
       - ./api:/var/www/brandboom/api:cached
       - ./dist:/var/www/brandboom/notes:cached
-      - ./docker/nginx:/etc/nginx/config/d:cached
+      - ./docker/nginx:/etc/nginx/sites-available:cached
     ports:
-      - 80:80
+      - ${VUE_APP_PORT:-8585}:80

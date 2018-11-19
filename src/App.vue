@@ -5,15 +5,18 @@
             <v-spacer></v-spacer>
             <v-text-field flat hide-details label="Search" prepend-inner-icon="search" solo-inverted v-model="search"></v-text-field>
             <v-divider class="mx-3" vertical></v-divider>
-            <v-btn @click="dialogs.create = true" icon id="add-note">
-                <v-icon flat>note_add</v-icon>
-            </v-btn>
+            <v-tooltip light nudge-right class="blue accent-4 white--text" v-model="hint" bottom>
+                <v-btn slot="activator" @click="dialogs.create = true" icon id="add-note">
+                    <v-icon flat>note_add</v-icon>
+                </v-btn>
+                <span>Click here to create a note</span>
+            </v-tooltip>
         </v-toolbar>
         <v-content>
             <v-container class="grey lighten-4" fluid grid-list-lg v-if="notes.length > 0">
                 <v-layout row wrap>
                     <v-flex :key="`note-${note.id}`" dark v-for="note in notes" xs3>
-                        <v-card hover>
+                        <v-card hover :color="note.color.color">
                             <v-toolbar :color="note.color.color" flat>
                                 <v-toolbar-title>{{ note.title }}</v-toolbar-title>
                                 <v-spacer></v-spacer>
@@ -31,7 +34,7 @@
                                     </v-list>
                                 </v-menu>
                             </v-toolbar>
-                            <v-card-text>{{ note.content }}</v-card-text>
+                            <v-card-text v-html="note.content"></v-card-text>
                         </v-card>
                     </v-flex>
                 </v-layout>
@@ -49,7 +52,6 @@
         <edit :dialog.sync="dialogs.edit"></edit>
         <delete :dialog.sync="dialogs.delete"></delete>
         <create :dialog.sync="dialogs.create"></create>
-        <v-tour :options="{ startTimeout: 2000, labels: { buttonStop: 'Dismiss' } }" :steps="steps" :style="{ zIndex: 10 }" name="getting-started"></v-tour>
         <v-snackbar :bottom="true" :color="statusColor" :timeout="6000" v-model="snackbar">
             {{ message }}
             <v-btn :color="buttonColor" @click="snackbar = false" flat>
@@ -73,6 +75,10 @@
   })
   export default class App extends Vue {
     protected search: string = ''
+
+    protected loading: boolean = false
+
+    protected hint: boolean = false
 
     protected steps: any[] = [
       {
@@ -118,8 +124,12 @@
       return this.$store.getters['getNotes']
     }
 
+    get emptyStateText (): string {
+      return this.loading ? 'Loading notes...' : 'You haven\'t saved any notes yet'
+    }
+
     public mounted (): void {
-      this.$tours['getting-started'].start()
+      this.loading = true
 
       this.$store.dispatch('fetchNotes')
         .catch((error: any) => {
@@ -127,6 +137,13 @@
           this.statusColor = 'red'
           this.buttonColor = 'white'
           this.snackbar = true
+        })
+        .then(() => {
+          this.loading = false
+
+          if (this.notes.length === 0) {
+            this.hint = true
+          }
         })
     }
   }

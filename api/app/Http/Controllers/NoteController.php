@@ -54,7 +54,7 @@ class NoteController extends Controller
     public function update(Request $request, Note $note): JsonResponse
     {
         tap($note, function (Note $note) use ($request) {
-            $note->update($request->only(['title', 'content']));
+            $note->update($request->only(['title', 'content', 'color']));
         })->refresh();
 
         return response()->json(compact('note'));

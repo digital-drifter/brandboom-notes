@@ -53,39 +53,18 @@
       this.$store.commit('setNote', note)
     }
 
-    // public title: string = ''
-    //
-    // public content: string = ''
-
     protected snackbar: boolean = false
 
     protected message: string = ''
 
     protected statusColor: string = 'green'
 
-    // protected color: IPaletteColor = {
-    //   name: 'yellow',
-    //   active: true,
-    //   theme: 'light',
-    //   color: colors.yellow.base
-    // }
-
     get theme (): ThemeOption {
       return this.note.color.theme
     }
 
-    // public mounted(): void {
-    //   this.color = this.note.color
-    //   this.title = this.note.title
-    //   this.content = this.note.content
-    // }
-
     public updateNote (): void {
-      this.$store.dispatch('updateNote', {
-        title: this.note.title,
-        color: this.note.color,
-        content: this.note.content
-      }).then(() => {
+      this.$store.dispatch('updateNote', this.note).then(() => {
         this.statusColor = 'green'
         this.message = 'Note Updated'
         this.snackbar = true
