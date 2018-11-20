@@ -8,7 +8,7 @@
 
 * Backend
 
-[Laravel](https://laravel.com/), [Docker](https://www.docker.com/), [SQLite](https://www.sqlite.org/index.html)
+[Laravel](https://laravel.com/), [Nginx](https://www.nginx.com/), [Docker](https://www.docker.com/), [SQLite](https://www.sqlite.org/index.html)
 
 ## Quick Start
 
