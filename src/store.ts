@@ -72,7 +72,7 @@ export default new Vuex.Store({
       const formData = new FormData()
 
       formData.append('_method', 'put')
-      formData.append('title', note.title)
+      formData.append('title', note.title || 'Untitled Note')
       formData.append('content', note.content)
       formData.append('color', note.color)
 
