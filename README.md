@@ -1,10 +1,14 @@
 # Notes App Demo
 
-## About
+## Built Using
 
 * Frontend
 
-Built using [Vue.js](https://vuejs.org/), [Vuetify](https://vuetifyjs.com/en/), [Vuex](https://vuex.vuejs.org/), [Vue Router](https://router.vuejs.org/),
+[Vue.js](https://vuejs.org/), [Vuetify](https://vuetifyjs.com/en/), [Vuex](https://vuex.vuejs.org/), [Vue Router](https://router.vuejs.org/),
+
+* Backend
+
+[Laravel](https://laravel.com/), [Docker](https://www.docker.com/)
 
 ## Quick Start
 
