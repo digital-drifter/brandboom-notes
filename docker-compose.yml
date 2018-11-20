@@ -2,14 +2,14 @@ version: '3.3'
 
 services:
   app:
-    container_name: brandboom_notes
-    image: digitaldrifter/brandboom-notes:latest
+    container_name: notes_app_demo
+    image: digitaldrifter/notes-app-demo:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile
     environment:
       - APP_DIR:${APP_DIR:-/app}
-      - APP_NAME="Brandboom Notes"
+      - APP_NAME="Notes App Demo"
       - APP_ENV=production
       - APP_KEY=base64:e2skaOYi6QO1kPHKY+2iEn0Sn9XRKimHJ7Ti5nJkC8A=
       - APP_DEBUG=false

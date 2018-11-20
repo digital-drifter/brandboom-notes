@@ -71,32 +71,7 @@ server {
     }
 }
 NGINX
-#
-#cat << ENV > `pwd`/docker/.env
-#APP_NAME="Brandboom Notes"
-#APP_ENV=local
-#APP_KEY=base64:e2skaOYi6QO1kPHKY+2iEn0Sn9XRKimHJ7Ti5nJkC8A=
-#APP_DEBUG=true
-#APP_URL=http://localhost
-#LOG_CHANNEL=single
-#DB_CONNECTION=sqlite
-#BROADCAST_DRIVER=log
-#CACHE_DRIVER=file
-#QUEUE_CONNECTION=sync
-#SESSION_DRIVER=file
-#SESSION_LIFETIME=120
-#REDIS_HOST=127.0.0.1
-#REDIS_PASSWORD=null
-#REDIS_PORT=6379
-#MAIL_DRIVER=smtp
-#MAIL_HOST=smtp.mailtrap.io
-#MAIL_PORT=2525
-#MAIL_USERNAME=null
-#MAIL_PASSWORD=null
-#MAIL_ENCRYPTION=null
-#ENV
 
 yarn docker:full
 
 rm `pwd`/docker/default.conf
-#rm `pwd`/docker/.env

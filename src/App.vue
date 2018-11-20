@@ -1,7 +1,7 @@
 <template>
-    <v-app id="brandboom-notes">
+    <v-app id="notes-app-demo">
         <v-toolbar absolute app clipped-left color="teal" dark>
-            <v-toolbar-title>Brandboom&nbsp;<strong>Notes</strong></v-toolbar-title>
+            <v-toolbar-title>Notes App&nbsp;<strong>Demo</strong></v-toolbar-title>
             <v-spacer></v-spacer>
             <v-text-field flat hide-details label="Search" prepend-inner-icon="search" solo-inverted v-model="search"></v-text-field>
             <v-divider class="mx-3" vertical></v-divider>

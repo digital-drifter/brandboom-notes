@@ -1,4 +1,4 @@
-# Brandboom Notes
+# Notes App Demo
 
 ## About
 
@@ -11,16 +11,16 @@ Built using [Vue.js](https://vuejs.org/), [Vuetify](https://vuetifyjs.com/en/), 
 ```bash
 # Run using docker
 
-docker run -p 8585:80 -d digitaldrifter/brandboom-notes:latest
+docker run -p 8585:80 -d digitaldrifter/notes-app-demo:latest
 ```
 
 ## Running Locally
 ```bash
 # Clone this repository
 
-git clone https://github.com/digital-drifter/brandboom-notes
+git clone https://github.com/digital-drifter/notes-app-demo
 
-cd brandboom-notes
+cd notes-app-demo
 ```
 
 ```bash
