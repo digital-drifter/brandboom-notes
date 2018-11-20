@@ -20,6 +20,8 @@ docker run -p 8585:80 -d digitaldrifter/notes-app-demo:latest
 
 Open in browser: http://localhost:8585/
 
+Get the Docker image: https://hub.docker.com/r/digitaldrifter/notes-app-demo/
+
 ## Running Locally
 ```bash
 # Clone this repository
