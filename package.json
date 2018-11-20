@@ -13,7 +13,8 @@
     "docker:build": "docker-compose build --pull --force-rm",
     "docker:connect": "docker-compose exec app sh",
     "docker:start": "docker-compose up -d",
-    "docker:stop": "docker-compose down"
+    "docker:stop": "docker-compose down",
+    "docker:full": "yarn docker:stop && yarn build && yarn docker:build && yarn docker:start"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",

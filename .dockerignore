@@ -12,6 +12,7 @@ tsconfig.json
 tslint.json
 vue.config.js
 yarn.lock
+api/.env
 api/.env.example
 api/.editorconfig
 api/composer.json

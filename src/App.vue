@@ -5,9 +5,12 @@
             <v-spacer></v-spacer>
             <v-text-field flat hide-details label="Search" prepend-inner-icon="search" solo-inverted v-model="search"></v-text-field>
             <v-divider class="mx-3" vertical></v-divider>
-            <v-btn @click="createNote" icon id="add-note">
-                <v-icon flat>note_add</v-icon>
-            </v-btn>
+            <v-tooltip left hover>
+                <v-btn slot="activator" @click="createNote" icon id="add-note">
+                    <v-icon flat>note_add</v-icon>
+                </v-btn>
+                <span>Create Note</span>
+            </v-tooltip>
         </v-toolbar>
         <v-content>
             <v-container class="grey lighten-4" fluid grid-list-lg v-if="notes.length > 0">
@@ -21,78 +24,69 @@
                                 <div class="editor">
                                     <editor-menu-bar :editor="createEditor(note)">
                                         <div :class="{ 'is-focused': focused }" class="menubar is-hidden" slot-scope="{ commands, isActive, focused }">
-                                            <button :class="{ 'is-active': isActive.bold() }" @click="commands.bold" class="menubar__button">
-                                                <v-icon flat small>format_bold</v-icon>
+                                            <button v-for="command in Object.keys(commands)"
+                                                    v-if="!Array<string>(['heading', 'code', 'bullet_list', 'ordered_list', 'undo', 'redo']).includes(command)"
+                                                    :key="command"
+                                                    :class="{ 'is-active': isActive[command]() }"
+                                                    @click="commands[command]"
+                                                    class="menubar__button">
+                                                <v-icon flat small>{{ `format_${command}` }}</v-icon>
                                             </button>
-
-                                            <button :class="{ 'is-active': isActive.italic() }" @click="commands.italic" class="menubar__button">
-                                                <v-icon flat small>format_italic</v-icon>
-                                            </button>
-
-                                            <button :class="{ 'is-active': isActive.strike() }" @click="commands.strike" class="menubar__button">
-                                                <v-icon flat small>format_strikethrough</v-icon>
-                                            </button>
-
-                                            <button :class="{ 'is-active': isActive.underline() }" @click="commands.underline" class="menubar__button">
-                                                <v-icon flat small>format_underlined</v-icon>
-                                            </button>
-
                                             <button :class="{ 'is-active': isActive.code() }" @click="commands.code" class="menubar__button">
                                                 <v-icon flat small>code</v-icon>
                                             </button>
-
-                                            <button :class="{ 'is-active': isActive.heading({ level: 1 }) }" @click="commands.heading({ level: 1 })" class="menubar__button">
-                                                H1
+                                            <button v-for="index in 3" :class="{ 'is-active': isActive.heading({ level: index }) }" @click="commands.heading({ level: index })" class="menubar__button">
+                                                {{ `H${index}` }}
                                             </button>
-
-                                            <button :class="{ 'is-active': isActive.heading({ level: 2 }) }" @click="commands.heading({ level: 2 })" class="menubar__button">
-                                                H2
-                                            </button>
-
-                                            <button :class="{ 'is-active': isActive.heading({ level: 3 }) }" @click="commands.heading({ level: 3 })" class="menubar__button">
-                                                H3
-                                            </button>
-
                                             <button :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list" class="menubar__button">
                                                 <v-icon flat small>format_list_bulleted</v-icon>
                                             </button>
-
                                             <button :class="{ 'is-active': isActive.ordered_list() }" @click="commands.ordered_list" class="menubar__button">
                                                 <v-icon flat small>format_list_numbered</v-icon>
                                             </button>
-
                                             <button @click="commands.undo" class="menubar__button">
                                                 <v-icon flat small>undo</v-icon>
                                             </button>
-
                                             <button @click="commands.redo" class="menubar__button">
                                                 <v-icon flat small>redo</v-icon>
                                             </button>
-
                                         </div>
                                     </editor-menu-bar>
                                     <editor-content :editor="createEditor(note)"></editor-content>
                                 </div>
                             </v-card-text>
                             <v-card-actions>
-                                <swatches :row-length="8" :show-border="true" :swatch-size="30" @input="note.color = $event" colors="material-light" popover-to="right" shapes="circles" v-model="note.color">
-                                    <v-icon class="black--text" flat slot="trigger">palette</v-icon>
-                                </swatches>
+                                <v-tooltip top hover>
+                                    <swatches slot="activator" :row-length="8" :show-border="true" :swatch-size="30" @input="note.color = $event" colors="material-light" popover-to="right" shapes="circles" v-model="note.color">
+                                        <v-btn slot="trigger" color="blue-grey" dark fab raised small icon>
+                                            <v-icon class="white--text" flat>palette</v-icon>
+                                        </v-btn>
+                                    </swatches>
+                                    <span>Choose Color</span>
+                                </v-tooltip>
                                 <v-spacer></v-spacer>
                                 <v-fab-transition>
-                                    <v-btn color="red" dark fab raised small v-model="editMode">
-                                        <v-icon flat small>delete</v-icon>
-                                        <v-icon flat small>cancel</v-icon>
-                                    </v-btn>
+                                    <v-tooltip top hover>
+                                        <v-btn slot="activator" @click="confirmDelete = false" class="grey white--text" dark fab raised small v-show="confirmDelete">
+                                            <v-icon flat small>cancel</v-icon>
+                                        </v-btn>
+                                        <span>Cancel</span>
+                                    </v-tooltip>
                                 </v-fab-transition>
                                 <v-fab-transition>
-                                    <v-btn @click="deleteNote(note)" color="red" dark fab raised small v-show="editMode">
-                                        <v-icon flat small>done</v-icon>
-                                    </v-btn>
+                                    <v-tooltip top hover class="mx-3">
+                                        <v-btn slot="activator" :color="confirmDelete ? 'green' : 'red'" :value="confirmDelete" @click="deleteNote(note)" dark fab raised small>
+                                            <v-icon flat small>{{ confirmDelete ? 'done' : 'delete' }}</v-icon>
+                                        </v-btn>
+                                        <span>{{ confirmDelete ? 'Confirm' : 'Delete' }}</span>
+                                    </v-tooltip>
                                 </v-fab-transition>
-                                <v-btn @click="updateNote(note)" color="blue" dark fab raised small>
-                                    <v-icon flat small>save</v-icon>
-                                </v-btn>
+                                <v-tooltip top hover>
+                                    <v-btn slot="activator" @click="updateNote(note)" color="blue" dark fab raised small>
+                                        <v-icon flat small>save</v-icon>
+                                    </v-btn>
+                                    <span>Save</span>
+                                </v-tooltip>
                             </v-card-actions>
                         </v-card>
                     </v-flex>
@@ -101,7 +95,7 @@
             <v-container fill-height fluid v-else>
                 <v-layout column>
                     <v-flex class="text-xs-center" xs12>
-                        <div class="display-2 grey--text text--lighten-1" style="font-family: 'Muli', sans-serif !important; padding-top: 10rem;">You haven't saved any notes yet</div>
+                        <div class="display-2 grey--text text--lighten-1" style="font-family: 'Muli', sans-serif !important; padding-top: 10rem;">{{ emptyStateText }}</div>
                         <v-icon :style="{ fontSize: '5rem' }" class="my-5 grey--text text--lighten-1" large>inbox</v-icon>
                         <div class="title grey--text text--accent-1">Click the Add Note button to get started</div>
                     </v-flex>
@@ -133,11 +127,11 @@
     }
   })
   export default class App extends Vue {
-    public editMode: boolean = false
+    protected confirmDelete: boolean = false
 
     protected search: string = ''
 
-    protected loading: boolean = false
+    protected loading: boolean = true
 
     protected snackbar: boolean = false
 
@@ -163,15 +157,9 @@
     }
 
     public mounted (): void {
-      this.loading = true
-
       this.$store.dispatch('fetchNotes')
         .catch(() => {
-          this.showSnackbar({
-            message: 'Unable to fetch notes',
-            statusColor: 'red',
-            buttonColor: 'white'
-          })
+          this.showErrorSnackbar('Unable to fetch notes')
         })
         .then(() => {
           this.loading = false
@@ -189,48 +177,35 @@
         color: '#FFF59D'
       })
         .catch(() => {
-          this.showSnackbar({
-            message: 'Unable to create note',
-            statusColor: 'red',
-            buttonColor: 'white'
-          })
+          this.showErrorSnackbar('Unable to create note')
         })
     }
 
     public async updateNote (note: INote): Promise<any> {
       await this.$store.dispatch('updateNote', note)
         .then(() => {
-          this.showSnackbar({
-            message: 'Note updated',
-            statusColor: 'green',
-            buttonColor: 'white'
-          })
+          this.showSuccessSnackbar('Note updated')
         })
         .catch(() => {
-          this.showSnackbar({
-            message: 'Unable to update note',
-            statusColor: 'red',
-            buttonColor: 'white'
-          })
+          this.showErrorSnackbar('Unable to update note')
         })
     }
 
     public async deleteNote (note: INote): Promise<any> {
-      await this.$store.dispatch('deleteNote', note)
-        .then(() => {
-          this.showSnackbar({
-            message: 'Note deleted',
-            statusColor: 'green',
-            buttonColor: 'white'
+      if (this.confirmDelete) {
+        await this.$store.dispatch('deleteNote', note)
+          .then(() => {
+            this.showSuccessSnackbar('Note deleted')
           })
-        })
-        .catch(() => {
-          this.showSnackbar({
-            message: 'Unable to delete note',
-            statusColor: 'red',
-            buttonColor: 'white'
+          .catch(() => {
+            this.showErrorSnackbar('Unable to delete note')
           })
-        })
+          .then(() => {
+            this.confirmDelete = false
+          })
+      } else {
+        this.confirmDelete = true
+      }
     }
 
     public createEditor (note: INote): any {
@@ -271,6 +246,14 @@
       this.boundEditors.push(({ note, editor }))
 
       return editor
+    }
+
+    public showErrorSnackbar (message: string): void {
+      this.showSnackbar({ message, statusColor: 'red', buttonColor: 'white' })
+    }
+
+    public showSuccessSnackbar (message: string): void {
+      this.showSnackbar({ message, statusColor: 'green', buttonColor: 'blue-grey' })
     }
 
     public showSnackbar ({ message, statusColor, buttonColor }: { message: string, statusColor: string, buttonColor: string }): void {

@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'single'),
+    'default' => 'syslog',
 
     /*
     |--------------------------------------------------------------------------
@@ -41,13 +41,13 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => '/tmp/laravel.log',
             'level' => 'debug',
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => '/tmp/laravel.log',
             'level' => 'debug',
             'days' => 14,
         ],

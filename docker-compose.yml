@@ -4,12 +4,34 @@ services:
   app:
     container_name: brandboom_notes
     image: digitaldrifter/brandboom-notes:latest
-    build: 
-      dockerfile: ./docker/Dockerfile
+    build:
       context: .
+      dockerfile: ./docker/Dockerfile
+    environment:
+      - APP_DIR:${APP_DIR:-/app}
+      - APP_NAME="Brandboom Notes"
+      - APP_ENV=production
+      - APP_KEY=base64:e2skaOYi6QO1kPHKY+2iEn0Sn9XRKimHJ7Ti5nJkC8A=
+      - APP_DEBUG=false
+      - APP_URL=http://localhost
+      - LOG_CHANNEL=single
+      - DB_CONNECTION=sqlite
+      - BROADCAST_DRIVER=log
+      - CACHE_DRIVER=file
+      - QUEUE_CONNECTION=sync
+      - SESSION_DRIVER=file
+      - SESSION_LIFETIME=120
+      - REDIS_HOST=127.0.0.1
+      - REDIS_PASSWORD=null
+      - REDIS_PORT=6379
+      - MAIL_DRIVER=smtp
+      - MAIL_HOST=smtp.mailtrap.io
+      - MAIL_PORT=2525
+      - MAIL_USERNAME=null
+      - MAIL_PASSWORD=null
+      - MAIL_ENCRYPTION=null
     volumes:
-      - ./api:/var/www/brandboom/api:cached
-      - ./dist:/var/www/brandboom/notes:cached
-      - ./docker/nginx:/etc/nginx/sites-available:cached
+      - ./api:${APP_DIR:-/app}/api
+      - ./dist:${APP_DIR:-/app}/notes
     ports:
       - ${VUE_APP_PORT:-8585}:80

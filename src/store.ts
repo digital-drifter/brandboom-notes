@@ -100,10 +100,14 @@ export default new Vuex.Store({
       return fetch(`${BASE_API_URL}/notes/${note.id}`, {
         method: 'post',
         body: formData
-      }).then(() => {
-        context.commit('setNotes', context.state.notes.filter((n: INote) => n.id !== note.id))
+      }).then((response: Response) => {
+        if (response.ok) {
+          context.commit('setNotes', context.state.notes.filter((n: INote) => n.id !== note.id))
 
-        return Promise.resolve()
+          return Promise.resolve()
+        } else {
+          return Promise.reject(response)
+        }
       })
     }
   }

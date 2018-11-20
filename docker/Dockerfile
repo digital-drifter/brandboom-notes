@@ -1,10 +1,13 @@
 FROM richarvey/nginx-php-fpm:latest
 
-COPY docker/nginx /etc/nginx/sites-available/
+ENV APP_DIR /app
 
-WORKDIR /var/www/brandboom
+ARG ROOT_DIR=${APP_DIR}
+
+VOLUME ${ROOT_DIR}
+
+WORKDIR ${ROOT_DIR}
 
 COPY dist notes/
 COPY api api/
-
-RUN chown nginx:nginx -R *
+COPY docker/default.conf /etc/nginx/sites-available/default.conf
