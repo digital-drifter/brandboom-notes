@@ -14,6 +14,8 @@ Built using [Vue.js](https://vuejs.org/), [Vuetify](https://vuetifyjs.com/en/), 
 docker run -p 8585:80 -d digitaldrifter/notes-app-demo:latest
 ```
 
+Open in browser: http://localhost:8585/
+
 ## Running Locally
 ```bash
 # Clone this repository
