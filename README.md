@@ -13,7 +13,7 @@
 ## Quick Start
 
 ```bash
-# Run using docker
+# Run the following command from a terminal
 
 docker run -p 8585:80 -d digitaldrifter/notes-app-demo:latest
 ```
