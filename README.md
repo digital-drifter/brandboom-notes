@@ -36,25 +36,16 @@ git clone https://github.com/digital-drifter/notes-app-demo
 cd notes-app-demo
 ```
 
-```bash
-# Install NPM dependencies
-
-yarn install
-```
-
-```bash
-# Install Laravel dependencies
-
-cd api
-
-composer install
-```
-
 ```dotenv
 # Add to .env
 
 VUE_APP_PORT=8585
 VUE_APP_URL=http://localhost
+```
+
+```bash
+# Run the install script
+./install.sh
 ```
 
 ### Compiles and hot-reloads for development
