@@ -2,13 +2,18 @@
 
 ## Built Using
 
-* Frontend
+#### Frontend
 
-[Vue.js](https://vuejs.org/), [Vuetify](https://vuetifyjs.com/en/), [Vuex](https://vuex.vuejs.org/), [Vue Router](https://router.vuejs.org/),
+* [Vue.js](https://vuejs.org/)
+* [Vuetify](https://vuetifyjs.com/en/)
+* [Vuex](https://vuex.vuejs.org/)
+* [Vue Router](https://router.vuejs.org/)
 
-* Backend
+#### Backend
 
-[Laravel](https://laravel.com/), [Nginx](https://www.nginx.com/), [Docker](https://www.docker.com/), [SQLite](https://www.sqlite.org/index.html)
+* [Laravel](https://laravel.com/)
+* [Nginx](https://www.nginx.com/)
+* [SQLite](https://www.sqlite.org/index.html)
 
 ## Quick Start
 
